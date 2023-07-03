@@ -42,7 +42,9 @@ jobs:
             pip install pylint requests django pytest selenium
         - name: Analysing the code with pylint
           run: |
-            pylint $(git ls-files '*.py')
+            pylint $(git ls-files '*.py') --errors-only
+        - name: Running tests with pytest
+          run: |
             pytest
         # Prepare to install to GitHub Pages
         - name: Setup Pages
