@@ -46,6 +46,7 @@ jobs:
         pytest
     
   analyze:
+    needs: build
     name: Analyze
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
@@ -102,6 +103,7 @@ jobs:
     # Single deploy job since we're just deploying
 
   deploy:
+    needs: analyze
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
