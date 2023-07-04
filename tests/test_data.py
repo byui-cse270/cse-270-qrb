@@ -1,17 +1,23 @@
 import pytest
 import requests
+from requests_mock.mocker import Mocker
 
 @pytest.fixture
-def mocker():
-    expected_response = {
-        "businesses": []
-    }
-    return expected_response    
+def mock_requests_get(mocker):
+    response_json = {"businesses":[{"name":"Teton Elementary"}]}
+    
+    # Patching requests.get to return a mocked response
+    mocker.patch.object(requests, 'get', return_value=MockResponse(response_json))
 
-def test_data_endpoint(mocker):
+class MockResponse:
+    def __init__(self, json_data, status_code=200):
+        self.json_data = json_data
+        self.status_code = status_code
 
-    # Mock the requests.get function
-    mocker.patch('requests.get')
+    def json(self):
+        return self.json_data
+
+def test_data_endpoint(mock_requests_get):
 
     # Make the HTTP GET request
     response = requests.get('http://127.0.0.1:8000/data/all')
