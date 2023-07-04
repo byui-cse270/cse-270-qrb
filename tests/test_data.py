@@ -1,7 +1,18 @@
 import pytest
 import requests
 
-def test_data_endpoint():
+@pytest.fixture
+def mocker():
+    expected_response = {
+        "businesses": []
+    }
+    return expected_response    
+
+def test_data_endpoint(mocker):
+
+    # Mock the requests.get function
+    mocker.patch('requests.get')
+
     # Make the HTTP GET request
     response = requests.get('http://127.0.0.1:8000/data/all')
 
